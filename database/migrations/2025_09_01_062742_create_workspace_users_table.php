@@ -12,15 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('workspace_users', function (Blueprint $table) {
-            $table->id();
-            // Rol mínimo técnico (luego podrás migrar a un sistema granular de permisos)
-            $table->enum('role', ['owner','admin','staff'])->default('staff');
-            $table->ulid('public_id')->unique();
-
-            $table->foreignId('workspace_id')->constrained('workspaces')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->uuid('id')->primary()->unique();
+            $table->enum('role', ['admin','staff'])->default('staff');
+            $table->foreignUuid('workspace_id')->constrained('workspaces')->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
-
             $table->unique(['workspace_id','user_id']);
         });
     }
